@@ -1,4 +1,5 @@
 pub use color_eyre::Result;
+pub use itertools::Itertools;
 pub use paste::paste;
 use std::sync::Once;
 

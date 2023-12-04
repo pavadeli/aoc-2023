@@ -88,6 +88,7 @@ name = "common"
 version = "0.1.0"
 dependencies = [
  "color-eyre",
+ "itertools",
  "paste",
 ]
 
@@ -111,7 +112,13 @@ name = "day3"
 version = "0.1.0"
 dependencies = [
  "common",
- "itertools",
+]
+
+[[package]]
+name = "day4"
+version = "0.1.0"
+dependencies = [
+ "common",
 ]
 
 [[package]]

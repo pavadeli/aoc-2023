@@ -1,5 +1,4 @@
-use common::boilerplate;
-use itertools::Itertools;
+use common::{boilerplate, Itertools};
 
 fn part1(input: &str) -> usize {
     let symbols = get_symbols(input).collect_vec();
