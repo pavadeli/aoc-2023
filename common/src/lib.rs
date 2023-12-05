@@ -9,6 +9,10 @@ pub fn init() {
     INIT.call_once(|| color_eyre::install().unwrap());
 }
 
+pub fn to_usize(input: impl AsRef<str>) -> usize {
+    input.as_ref().parse().unwrap()
+}
+
 #[macro_export]
 macro_rules! boilerplate {
     {

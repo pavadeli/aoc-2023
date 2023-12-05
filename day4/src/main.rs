@@ -1,4 +1,4 @@
-use common::{boilerplate, Itertools};
+use common::{boilerplate, to_usize, Itertools};
 use std::collections::HashSet;
 
 fn part1(input: &str) -> usize {
@@ -22,7 +22,6 @@ fn part2(input: &str) -> usize {
     cards.into_iter().map(|card| card.count).sum()
 }
 
-#[derive(Debug)]
 struct Card {
     count: usize,
     left: HashSet<usize>,
@@ -48,10 +47,7 @@ impl Card {
 }
 
 fn parse_numbers(input: &str) -> HashSet<usize> {
-    input
-        .split_ascii_whitespace()
-        .map(|nr| nr.parse().unwrap())
-        .collect()
+    input.split_ascii_whitespace().map(to_usize).collect()
 }
 
 boilerplate! {

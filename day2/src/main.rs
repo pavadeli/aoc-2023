@@ -1,4 +1,4 @@
-use common::boilerplate;
+use common::{boilerplate, to_usize};
 use std::collections::HashMap;
 
 fn part1(input: &str) -> usize {
@@ -9,14 +9,14 @@ fn part1(input: &str) -> usize {
         .filter_map(|line| {
             let line = line.strip_prefix("Game ").unwrap();
             let (id, rest) = line.split_once(": ").unwrap();
-            let id: usize = id.parse().unwrap();
+            let id: usize = to_usize(id);
             let possible = rest.split("; ").all(|set| {
                 set.split(", ").all(|combo| {
                     let (count, color) = combo.split_once(' ').unwrap();
                     let Some(allowed) = q.get(color) else {
                         return false;
                     };
-                    *allowed >= count.parse().unwrap()
+                    *allowed >= to_usize(count)
                 })
             });
             possible.then_some(id)
@@ -35,7 +35,7 @@ fn part2(input: &str) -> usize {
             sets.for_each(|set| {
                 set.split(", ").for_each(|combo| {
                     let (count, color) = combo.split_once(' ').unwrap();
-                    let count = count.parse().unwrap();
+                    let count = to_usize(count);
                     game.entry(color)
                         .and_modify(|c| *c = (*c).max(count))
                         .or_insert(count);

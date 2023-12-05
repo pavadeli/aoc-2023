@@ -1,4 +1,4 @@
-use common::boilerplate;
+use common::{boilerplate, to_usize};
 use regex::Regex;
 
 fn part1(input: &str) -> usize {
@@ -8,7 +8,7 @@ fn part1(input: &str) -> usize {
             let mut digits = line.chars().filter(char::is_ascii_digit);
             let first = digits.next().unwrap();
             let last = digits.last().unwrap_or(first);
-            format!("{first}{last}").parse().unwrap()
+            to_usize(format!("{first}{last}"))
         })
         .sum()
 }
@@ -35,7 +35,7 @@ fn part2(input: &str) -> usize {
                 "nine" => "9",
                 r => r,
             });
-            format!("{first}{last}").parse().unwrap()
+            to_usize(format!("{first}{last}"))
         })
         .sum()
 }
