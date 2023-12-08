@@ -1,5 +1,5 @@
 pub use color_eyre::Result;
-pub use itertools::Itertools;
+pub use itertools::*;
 pub use paste::paste;
 use std::sync::Once;
 
@@ -16,7 +16,7 @@ pub fn to_usize(input: impl AsRef<str>) -> usize {
 #[macro_export]
 macro_rules! boilerplate {
     {
-        $($name:ident => { $($input:ident$(($($p:expr),*))? -> $value:expr),* })*
+        $($name:ident => { $($input:ident$(($($p:expr),*))? -> $value:expr),* $(,)? })*
     } => {
         fn main() {
             $crate::init();
