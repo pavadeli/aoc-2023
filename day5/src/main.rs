@@ -1,7 +1,7 @@
-use common::{boilerplate, to_usize, Itertools};
+use common::{boilerplate, to_usize, Itertools, SS};
 use range_collections::{RangeSet, RangeSet2};
 
-fn part1(input: &'static str) -> usize {
+fn part1(input: SS) -> usize {
     let mut lines = input.lines();
     let mut items = RangeSet::empty();
     for seed in parse_seeds(&mut lines) {
@@ -10,7 +10,7 @@ fn part1(input: &'static str) -> usize {
     go(lines, items)
 }
 
-fn part2(input: &'static str) -> usize {
+fn part2(input: SS) -> usize {
     let mut lines = input.lines();
     let mut items = RangeSet::empty();
     for (start, length) in parse_seeds(&mut lines).tuples() {
@@ -19,7 +19,7 @@ fn part2(input: &'static str) -> usize {
     go(lines, items)
 }
 
-fn go(mut lines: impl Iterator<Item = &'static str>, mut items: RangeSet<[usize; 2]>) -> usize {
+fn go(mut lines: impl Iterator<Item = SS>, mut items: RangeSet<[usize; 2]>) -> usize {
     assert_eq!(lines.next().unwrap(), "");
     for mapping in parse_mappings(lines) {
         let intersections = mapping
@@ -45,7 +45,7 @@ fn go(mut lines: impl Iterator<Item = &'static str>, mut items: RangeSet<[usize;
     items.boundaries()[0]
 }
 
-fn parse_mappings(lines: impl Iterator<Item = &'static str>) -> impl Iterator<Item = Vec<Mapping>> {
+fn parse_mappings(lines: impl Iterator<Item = SS>) -> impl Iterator<Item = Vec<Mapping>> {
     lines.batching(|it| {
         assert!(it.next()?.ends_with("map:"));
         Some(
@@ -57,7 +57,7 @@ fn parse_mappings(lines: impl Iterator<Item = &'static str>) -> impl Iterator<It
     })
 }
 
-fn parse_seeds(mut lines: impl Iterator<Item = &'static str>) -> impl Iterator<Item = usize> {
+fn parse_seeds(mut lines: impl Iterator<Item = SS>) -> impl Iterator<Item = usize> {
     lines
         .next()
         .unwrap()

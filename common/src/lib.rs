@@ -3,6 +3,8 @@ pub use itertools::*;
 pub use paste::paste;
 use std::sync::Once;
 
+pub type SS = &'static str;
+
 static INIT: Once = Once::new();
 
 pub fn init() {
@@ -10,6 +12,10 @@ pub fn init() {
 }
 
 pub fn to_usize(input: impl AsRef<str>) -> usize {
+    input.as_ref().parse().unwrap()
+}
+
+pub fn to_isize(input: impl AsRef<str>) -> isize {
     input.as_ref().parse().unwrap()
 }
 

@@ -1,7 +1,5 @@
-use common::{boilerplate, EitherOrBoth::Both, Itertools};
+use common::{boilerplate, EitherOrBoth::Both, Itertools, SS};
 use std::{collections::HashMap, usize};
-
-type SS = &'static str;
 
 fn part1(input: SS) -> usize {
     let (instr, nodes) = parse_input(input);
@@ -57,7 +55,6 @@ fn part2(input: SS) -> usize {
     combined.pattern[0]
 }
 
-#[derive(Clone, Debug)]
 struct Spectral {
     pattern: Vec<usize>,
     pattern_start: usize,
