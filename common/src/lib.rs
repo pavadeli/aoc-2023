@@ -40,7 +40,7 @@ macro_rules! boilerplate {
             $($(
                 paste!{
                     #[test]
-                    fn [<$name _ $input _ $($($p)_*)?>]() {
+                    fn [<$name _ $input $(_ $($p)_*)?>]() {
                         $crate::init();
                         let input = include_str!(concat!(stringify!($input), ".txt"));
                         assert_eq!($name(input $(, $($p),*)?), $value);
