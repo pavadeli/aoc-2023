@@ -1,6 +1,6 @@
 use common::{boilerplate, Itertools, SS};
 use pathfinding::{
-    directed::dfs::dfs_reach,
+    directed::bfs::bfs_reach,
     matrix::{directions::*, Matrix},
 };
 
@@ -10,7 +10,7 @@ fn part1(input: SS) -> usize {
 }
 
 fn count_energized(matrix: &Matrix<char>, start: ((usize, usize), (isize, isize))) -> usize {
-    dfs_reach(start, |&(pos, dir)| {
+    bfs_reach(start, |&(pos, dir)| {
         let dirs = match (matrix[pos], dir) {
             ('.', _) | ('-', E | W) | ('|', N | S) => vec![dir],
             ('|', E | W) => vec![S, N],
