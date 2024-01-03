@@ -28,7 +28,3 @@ members = [
     "day24",
     "day25",
 ]
-
-[profile.release]
-opt-level = 3
-lto = true

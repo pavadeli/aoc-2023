@@ -2,11 +2,10 @@ use common::{boilerplate, Itertools, SS};
 use pathfinding::matrix::Matrix;
 use rand::{seq::IteratorRandom, thread_rng};
 use rayon::iter::{ParallelBridge, ParallelIterator};
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap};
 
 #[derive(Clone)]
 struct Graph {
-    names: Vec<SS>,
     edges: Matrix<bool>,
     nodesets: Matrix<bool>,
 }
@@ -15,34 +14,39 @@ type Edge = (usize, usize);
 
 impl Graph {
     fn parse(input: SS) -> Self {
-        let mut edges = HashMap::new();
-        let mut nodes = HashSet::new();
+        let mut input_edges = HashMap::new();
+        let mut nodes = BTreeSet::new();
         for line in input.lines() {
             let (left, rights) = line.split_once(": ").unwrap();
             let rights = rights.split_whitespace().collect_vec();
             nodes.insert(left);
             nodes.extend(&rights);
-            edges.insert(left, rights);
+            input_edges.insert(left, rights);
         }
-        let names = nodes.into_iter().sorted().collect_vec();
-        let count = names.len();
-        let mut graph = Self {
-            names,
-            edges: Matrix::new(count, count, false),
-            nodesets: Matrix::new(count, count, false),
-        };
-        for (left, stuff) in edges {
-            let left = graph.names.binary_search(&left).unwrap();
-            for right in stuff {
-                let right = graph.names.binary_search(&right).unwrap();
-                graph.edges[(left, right)] = true;
-                graph.edges[(right, left)] = true;
-            }
+        let nodes = nodes.into_iter().collect_vec();
+        let count = nodes.len();
+
+        Self {
+            edges: {
+                let mut edges = Matrix::new(count, count, false);
+                for (left, rights) in input_edges {
+                    let left = nodes.binary_search(&left).unwrap();
+                    for right in rights {
+                        let right = nodes.binary_search(&right).unwrap();
+                        edges[(left, right)] = true;
+                        edges[(right, left)] = true;
+                    }
+                }
+                edges
+            },
+            nodesets: {
+                let mut nodesets = Matrix::new(count, count, false);
+                for i in 0..count {
+                    nodesets[(i, i)] = true;
+                }
+                nodesets
+            },
         }
-        for i in 0..count {
-            graph.nodesets[(i, i)] = true;
-        }
-        graph
     }
 
     fn nodes(&self) -> impl Iterator<Item = usize> + '_ {
@@ -81,13 +85,11 @@ impl Graph {
             self.nodesets[(a, b)] = true;
             self.nodesets[(b, a)] = true;
         }
-        self.nodesets[(a, b)] = true;
-        self.nodesets[(b, a)] = true;
     }
 }
 
 fn part1(input: SS) -> usize {
-    let original_graph: Graph = Graph::parse(input);
+    let original_graph = Graph::parse(input);
 
     // See: https://en.wikipedia.org/wiki/Minimum_cut
     (0..)
@@ -100,7 +102,7 @@ fn part1(input: SS) -> usize {
                 graph.merge_nodesets(a, b);
             }
             let base_graph = graph;
-            for _ in 0..50 {
+            for _ in 0..20 {
                 let mut graph = base_graph.clone();
                 while graph.nodes().nth(2).is_some() {
                     let (a, b) = graph.edges().choose(rng).unwrap();
